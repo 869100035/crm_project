@@ -108,6 +108,8 @@
     <link rel="stylesheet" th:href="@{static/plugins/bootstrap-slider/slider.css}">
     <link rel="stylesheet"
           th:href="@{static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet"
+          th:href="@{static/css/simpleAlert.css}">
 </head>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -148,15 +150,13 @@
                                     <button type="button" class="btn btn-default" title="新建"
                                             onclick="window.location.href='product-add.html'"><i class="fa fa-file-o"></i> 新建
                                     </button>
-                                    <button type="button" class="btn btn-default" title="删除"><i
-                                            class="fa fa-trash-o"></i> 删除
+                                    <button type="button" class="btn btn-default" title="删除" id="btn_del">
+                                        <i class="fa fa-trash-o"></i> 删除
                                     </button>
-                                    <button type="button" class="btn btn-default" title="开启"><i class="fa fa-check"></i>
-                                        开启
-                                    </button>
-                                    <button type="button" class="btn btn-default" title="屏蔽"><i class="fa fa-ban"></i>
-                                        屏蔽
-                                    </button>
+                                    <button type="button" class="btn btn-default" title="开启" onclick="updateStatus(1)">
+                                    <i class="fa fa-check"></i>开启</button>
+                                    <button type="button" class="btn btn-default" title="屏蔽" onclick="updateStatus(0)">
+                                    <i class="fa fa-ban"></i>屏蔽</button>
                                     <button type="button" class="btn btn-default" title="刷新" onclick="select()"><i
                                             class="fa fa-refresh"  ></i> 刷新
                                     </button>
@@ -215,17 +215,19 @@
                     <div class="pull-left">
                         <div class="form-group form-inline">
                             <span id="total"></span>
-                            <select class="form-control">
+                            <select class="form-control" onchange="select()">
                                 <option>1</option>
                                 <option>2</option>
                                 <option selected="selected">3</option>
                                 <option>4</option>
                                 <option>5</option>
                             </select> 条
+                            <span id="total2"></span>
                         </div>
                     </div>
 
                     <div class="box-tools pull-right">
+
                         <ul class="pagination" id="pages">
                             <li>
                                 <a href="#" aria-label="Previous">首页</a>
@@ -251,6 +253,9 @@
         <!-- 正文区域 /-->
 
     </div>
+    <form id="myform" action="" method="post">
+        <input type="hidden" id="transfer" name="_method" value="">
+    </form>
     <!-- @@close -->
     <!-- 内容区域 /-->
 
@@ -311,23 +316,27 @@
 <script th:src="@{static/plugins/bootstrap-slider/bootstrap-slider.js}"></script>
 <script th:src="@{static/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js}"></script>
 <script th:src="@{static/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script th:src="@{static/plugins/jQuery/simpleAlert.js}"></script>
 <script>
     $(function () {
         select();
+        del();
     })
 
     function select() {
         var $selected = $(".form-control option:selected").val();
         pages(1,$selected);
     }
+
     function pages(pageNo,pageSize) {
-        $.get("/findAllProducts/"+pageNo+"/"+pageSize,function (data) {
+        $.get("/product/"+pageNo+"/"+pageSize,function (data) {
             $("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
+            $("#total2").text(" 当前第 "+data.pageNum+" 页");
             var $tbody = $("#tbody");
             $tbody.empty();
             $.each(data.list,function (index,product) {
                 var $tr = $("<tr></tr>");
-                var $td1 = $("<td><input name='ids' type='checkbox'></td>");
+                var $td1 = $("<td><input name='ids' type='checkbox' value='"+product.id+"'></td>");
                 var $td2 = $("<td>"+(index+1)+"</td>");
                 var $td3 = $("<td>"+product.productNum+"</td>");
                 var $td4 = $("<td>"+product.productName+"</td>");
@@ -335,7 +344,7 @@
                 var $td6 = $("<td>"+product.departureTime+"</td>");
                 var $td7 = $("<td class='text-center'>"+product.productPrice+"</td>");
                 var $td8 = $("<td class='text-center'>"+product.productDesc+"</td>");
-                var $td9 = $("<td class='text-center'>"+product.productStatus+"</td>");
+                var $td9 = $("<td class='text-center'>"+(product.productStatus=='1'?'开启':'关闭')+"</td>");
                 var $td10 = $("<td class='text-center'>" +
                     "<button type='button' class='btn bg-olive btn-xs'>订单</button>" +
                     "<button type='button' class='btn bg-olive btn-xs'>详情</button>" +
@@ -357,6 +366,67 @@
                 var $li4 = $("<li><a href='#' onclick='pages("+data.pages+","+data.pageSize+")' aria-label='Next'>尾页</a></li>")
                 $ul.append($li3).append($li4)
         })
+    }
+    function del() {
+        $("#btn_del").click(function(){
+            var list = new Array();
+            $("input[name='ids']:checked").each(function (e) {
+                list.push($(this).val())
+            });
+            var del = simpleAlert({
+                "content":"确定删除"+list.length+"个产品？",
+                "buttons":{
+                    "确定":function(){
+                        var listJson = JSON.stringify(list)
+                        $.post("/product",{"_method":"delete","listJson":listJson},function (data) {
+                            var res = simpleAlert({
+                                "content":"成功删除"+data+"个产品",
+                                "closeAll":true,
+                                "buttons":{
+                                    "确定":function () {
+                                        res.close();
+                                        select();
+                                    }
+                                }
+                            })
+                        });
+                    },
+                    "取消":function(){
+                        del.close();
+                    }
+                }
+            })
+        })
+    }
+    function updateStatus(status) {
+            var list = new Array();
+            $("input[name='ids']:checked").each(function (e) {
+                list.push($(this).val())
+            });
+            var update = simpleAlert({
+                "content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个产品？",
+                "buttons":{
+                    "确定":function(){
+                        var listJson = JSON.stringify(list)
+                        $.post("/product",{"_method":"put","status":status,"listJson":listJson},function (data) {
+                            var res = simpleAlert({
+                                "content":"成功"+(status==1?'开启':'屏蔽')+data+"个产品",
+                                "closeAll":true,
+                                "buttons":{
+                                    "确定":function () {
+                                        res.close();
+                                        select();
+                                    }
+                                }
+                            })
+                        });
+                    },
+                    "取消":function(){
+                        update.close();
+                    }
+                }
+            })
+
     }
 </script>
 <script>
