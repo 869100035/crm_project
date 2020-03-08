@@ -11,6 +11,10 @@
         select <include refid="order_column"></include> from orders
     </select>
 
+    <select id="findOrderById" resultMap="order_pro">
+        select <include refid="order_column"></include> from orders where id=#{id}
+    </select>
+
     <resultMap id="order_pro" type="order">
         <id property="id" column="id"></id>
         <result property="orderNum" column="orderNum"></result>
@@ -19,10 +23,33 @@
         <result property="orderDesc" column="orderDesc" ></result>
         <result property="payType" column="payType" ></result>
         <result property="orderStatus" column="orderStatus" ></result>
+        <result property="productId" column="productId" ></result>
         <result property="memberId" column="memberId" ></result>
 <!--        <result property="productId" column="productId" ></result>-->
         <association property="product" javaType="product"
                      select="com.hwua.mapper.ProductMapper.findProductById" column="productId">
         </association>
+        <association property="member" javaType="member" fetchType="lazy"
+                     select="com.hwua.mapper.MemberMapper.findMemberById" column="memberId">
+        </association>
+        <collection property="list" javaType="list" ofType="traveller" fetchType="lazy"
+                    select="com.hwua.mapper.TravellerMapper.findTravellerByOrderId" column="id">
+        </collection>
     </resultMap>
+
+
+    <update id="updateOrderStatus">
+        update orders set orderStatus=#{status}
+        where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteOrdersById">
+        delete from orders where id in
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

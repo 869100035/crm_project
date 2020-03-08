@@ -19,6 +19,8 @@ public class ExtMVCConfig {
                 registry.addViewController("/product-list1.html").setViewName("pages/product-list1");
                 registry.addViewController("/orders-page-list.html").setViewName("pages/orders-page-list");
                 registry.addViewController("/product-add.html").setViewName("pages/product-add");
+                registry.addViewController("/orders-show.html").setViewName("pages/orders-show");
+                registry.addViewController("/user-list.html").setViewName("pages/user-list");
             }
         };
     }

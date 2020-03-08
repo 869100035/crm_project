@@ -46,7 +46,6 @@ spring:
         # 忽略过滤格式
         exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
   mvc:
-    static-path-pattern: /static/**
     hiddenmethod:
       filter:
         enabled: true

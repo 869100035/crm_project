@@ -16,8 +16,8 @@ class CrmProjectApplicationTests {
     private IOrderService orderService;
     @Test
     void contextLoads() throws Exception{
-        PageInfo<Order> pageInfo = orderService.findAllOrders(1, 3);
-        System.out.println(pageInfo);
+        Order order = orderService.findOrderById("4d1d1f65-9e51-11e9-a844-484d7ebd894c");
+        System.out.println(order);
     }
 
 }

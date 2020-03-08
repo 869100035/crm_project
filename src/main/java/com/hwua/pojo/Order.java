@@ -21,7 +21,10 @@ public class Order {
   private String orderDesc;
   private long payType;
   private long orderStatus;
+  private String productId;
   private String memberId;
   private Product product;
+  private Member member;
+  private List<Traveller> list;
 
 }

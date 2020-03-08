@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwua.mapper.TravellerMapper">
+    <sql id="traveller_column">
+        id,name,sex,phoneNum,credentialsType,credentialsNum,travellerType
+    </sql>
+    <select id="findTravellerByOrderId" resultType="traveller">
+        select t.id,name,sex,phoneNum,credentialsType,credentialsNum,travellerType from traveller t
+        left join order_traveller ot on t.id=ot.travellerid left join orders o on o.id=ot.orderid where o.id=#{id}
+    </select>
+</mapper>
