@@ -90,26 +90,22 @@
     <link rel="stylesheet" th:href="@{/plugins/jvectormap/jquery-jvectormap-1.2.2.css}">
     <link rel="stylesheet" th:href="@{/plugins/datepicker/datepicker3.css}">
     <link rel="stylesheet" th:href="@{/plugins/daterangepicker/daterangepicker.css}">
-    <link rel="stylesheet"
-          th:href="@{/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css}">
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css}">
     <link rel="stylesheet" th:href="@{/plugins/datatables/dataTables.bootstrap.css}">
     <link rel="stylesheet" th:href="@{/plugins/treeTable/jquery.treetable.css}">
-    <link rel="stylesheet"
-          th:href="@{/plugins/treeTable/jquery.treetable.theme.default.css}">
+    <link rel="stylesheet" th:href="@{/plugins/treeTable/jquery.treetable.theme.default.css}">
     <link rel="stylesheet" th:href="@{/plugins/select2/select2.css}">
     <link rel="stylesheet" th:href="@{/plugins/colorpicker/bootstrap-colorpicker.min.css}">
-    <link rel="stylesheet"
-          th:href="@{/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css}">
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css}">
     <link rel="stylesheet" th:href="@{/plugins/adminLTE/css/AdminLTE.css}">
     <link rel="stylesheet" th:href="@{/plugins/adminLTE/css/skins/_all-skins.min.css}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.css}">
     <link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.skinNice.css}">
     <link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/slider.css}">
-    <link rel="stylesheet"
-          th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css}">
-    <link rel="stylesheet"
-          th:href="@{/css/simpleAlert.css}">
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet" th:href="@{/css/simpleAlert.css}">
+    <link rel="stylesheet" th:href="@{/css/page.css}">
 </head>
 
 <body class="hold-transition skin-purple sidebar-mini">
@@ -225,26 +221,7 @@
                             <span id="total2"></span>
                         </div>
                     </div>
-
-                    <div class="box-tools pull-right">
-
-                        <ul class="pagination" id="pages">
-                            <li>
-                                <a href="#" aria-label="Previous">首页</a>
-                            </li>
-                            <li><a href="#">上一页</a></li>
-                            <li><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a href="#">4</a></li>
-                            <li><a href="#">5</a></li>
-                            <li><a href="#">下一页</a></li>
-                            <li>
-                                <a href="#" aria-label="Next">尾页</a>
-                            </li>
-                        </ul>
-                    </div>
-
+                    <div class="box-tools pull-right" id="Pagination"></div>
                 </div>
                 <!-- /.box-footer-->
             </div>
@@ -317,18 +294,19 @@
 <script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js}"></script>
 <script th:src="@{/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
 <script th:src="@{/plugins/jQuery/simpleAlert.js}"></script>
+<script th:src="@{/plugins/jQuery/jquery.pagination.js}"></script>
 <script>
+    var isFirst=true;
     $(function () {
         select();
         del();
-    })
-
+    });
     function select() {
         var $selected = $(".form-control option:selected").val();
-        pages(1,$selected);
+        isFirst=true
+        pagination(1,$selected);
     }
-
-    function pages(pageNo,pageSize) {
+    function pagination(pageNo,pageSize) {
         $.get("/product/"+pageNo+"/"+pageSize,function (data) {
             $("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
             $("#total2").text(" 当前第 "+data.pageNum+" 页");
@@ -337,7 +315,7 @@
             $.each(data.list,function (index,product) {
                 var $tr = $("<tr></tr>");
                 var $td1 = $("<td><input name='ids' type='checkbox' value='"+product.id+"'></td>");
-                var $td2 = $("<td>"+(index+1)+"</td>");
+                var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
                 var $td3 = $("<td>"+product.productNum+"</td>");
                 var $td4 = $("<td>"+product.productName+"</td>");
                 var $td5 = $("<td>"+product.cityName+"</td>");
@@ -353,19 +331,31 @@
                     .append($td6).append($td7).append($td8).append($td9).append($td10);
                 $tbody.append($tr);
             })
-                var $ul = $("#pages");
-                $ul.empty();
-                var $li1 = $("<li><a href='#' onclick='pages(1,"+data.pageSize+")' aria-label='Previous'>首页</a></li>")
-                var $li2 = $("<li><a href='#' onclick='pages("+data.prePage+","+data.pageSize+")'>上一页</a></li>")
-                $ul.append($li1).append($li2)
-                for (var i=1;i<=data.pages;i++){
-                    var $li = $("<li><a href='#' onclick='pages("+i+","+data.pageSize+")'>"+i+"</a></li>");
-                    $ul.append($li);
-                }
-                var $li3 = $("<li><a href='#' onclick='pages("+data.nextPage+","+data.pageSize+")'>下一页</a></li>")
-                var $li4 = $("<li><a href='#' onclick='pages("+data.pages+","+data.pageSize+")' aria-label='Next'>尾页</a></li>")
-                $ul.append($li3).append($li4)
+            if(isFirst){
+                initPagination(data.total,pageSize);//初始化分頁插件
+                isFirst=false;//第一次不要执行分页插件的回调函数
+            }
         })
+    }
+    function initPagination(total,pageSize) {
+        /*初始化插件*/
+        $("#Pagination").pagination(total, {
+            num_edge_entries: 1, //边缘页数
+            num_display_entries: 3, //主体按钮数
+            callback: pageselectCallback,  /*回调函数，当点击按钮的时候，就会调用指定的分页处理函数*/
+            items_per_page: pageSize, //每页显示记录数
+            prev_text: "前一页",
+            next_text: "后一页"
+        });
+
+        function pageselectCallback(page_index) {
+            //首次加载的时候不要再次执行分页函数，因为一开始的时候就先做了加载数据，第二次开始，当点击分页按钮的时候重新加载分页函数拿到下一页的数据
+            if (!isFirst) {
+                pagination(page_index + 1, pageSize);
+            }
+            isFirst = false;
+            return false;
+        }
     }
     function del() {
         $("#btn_del").click(function(){
@@ -399,34 +389,33 @@
         })
     }
     function updateStatus(status) {
-            var list = new Array();
-            $("input[name='ids']:checked").each(function (e) {
-                list.push($(this).val())
-            });
-            var update = simpleAlert({
-                "content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个产品？",
-                "buttons":{
-                    "确定":function(){
-                        var listJson = JSON.stringify(list)
-                        $.post("/product",{"_method":"put","status":status,"listJson":listJson},function (data) {
-                            var res = simpleAlert({
-                                "content":"成功"+(status==1?'开启':'屏蔽')+data+"个产品",
-                                "closeAll":true,
-                                "buttons":{
-                                    "确定":function () {
-                                        res.close();
-                                        select();
-                                    }
+        var list = new Array();
+        $("input[name='ids']:checked").each(function (e) {
+            list.push($(this).val())
+        });
+        var update = simpleAlert({
+            "content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个产品？",
+            "buttons":{
+                "确定":function(){
+                    var listJson = JSON.stringify(list)
+                    $.post("/product",{"_method":"put","status":status,"listJson":listJson},function (data) {
+                        var res = simpleAlert({
+                            "content":"成功"+(status==1?'开启':'屏蔽')+data+"个产品",
+                            "closeAll":true,
+                            "buttons":{
+                                "确定":function () {
+                                    res.close();
+                                    select();
                                 }
-                            })
-                        });
-                    },
-                    "取消":function(){
-                        update.close();
-                    }
+                            }
+                        })
+                    });
+                },
+                "取消":function(){
+                    update.close();
                 }
-            })
-
+            }
+        });
     }
 </script>
 <script>

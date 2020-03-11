@@ -12,13 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"handler"})
-public class User {
+public class Role {
 
   private String id;
-  private String email;
-  private String username;
-  private String password;
-  private String phoneNum;
-  private long status;
-  private List<Role> list;
+  private String roleName;
+  private String roleDesc;
+  private List<Permission> list;
 }

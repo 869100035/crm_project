@@ -8,4 +8,7 @@ import java.util.List;
 @Component
 public interface UserMapper {
     List<User> findAllUsers()throws Exception;
+    Integer addUser(User user)throws Exception;
+    User findUserById(String id)throws Exception;
+    User findUserByName(String username)throws Exception;
 }

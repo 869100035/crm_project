@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hwua.mapper.RoleMapper">
+    <select id="findAllRoles" resultType="role">
+        select id,roleName,roleDesc from role
+    </select>
+
+    <insert id="addRole">
+        insert into role values(uuid(),#{roleName},#{roleDesc})
+    </insert>
+
+    <select id="findRoleById" resultMap="role_map">
+        select id,roleName,roleDesc from role where id=#{id}
+    </select>
+
+    <resultMap id="role_map" type="role">
+        <id property="id" column="id"></id>
+        <result property="roleName" column="roleName"></result>
+        <result property="roleDesc" column="roleDesc"></result>
+        <collection property="list" javaType="list" ofType="permission" column="id" fetchType="lazy"
+                    select="com.hwua.mapper.PermissionMapper.findPermissionsByRoleId">
+        </collection>
+    </resultMap>
+
+    <delete id="deleteRoleById">
+        delete from role where id=#{id}
+    </delete>
+
+    <select id="findRolesByUserId" resultMap="role_map">
+        select r.id,roleName,roleDesc from role r left join users_role ur on r.id=ur.roleId
+        left join users u on ur.userId=u.id where u.id=#{id}
+    </select>
+
+    <delete id="delUsers_roleByUserId">
+        delete from users_role where userId=#{id}
+    </delete>
+
+    <insert id="addUsers_roleByUserId">
+        insert into users_role values
+        <foreach collection="list" item="roleId" separator=",">
+            (#{id},#{roleId})
+        </foreach>
+    </insert>
+</mapper>

@@ -33,6 +33,7 @@
 <link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.css}">
 <link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.skinNice.css}">
 <link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/slider.css}">
+<link rel="stylesheet" th:href="@{/css/page.css}">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -77,7 +78,7 @@
 							<div class="pull-left">
 								<div class="form-group form-inline">
 									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建" onclick="location.href='@{/pages/user-add.js}p'">
+										<button type="button" class="btn btn-default" title="新建" onclick="location.href='user-add.html'">
 											<i class="fa fa-file-o"></i> 新建
 										</button>
 										
@@ -152,19 +153,7 @@
 							</div>
 						</div>
 
-						<div class="box-tools pull-right">
-							<ul class="pagination" id="pages">
-								<li><a href="#" aria-label="Previous">首页</a></li>
-								<li><a href="#">上一页</a></li>
-								<li><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">5</a></li>
-								<li><a href="#">下一页</a></li>
-								<li><a href="#" aria-label="Next">尾页</a></li>
-							</ul>
-						</div>
+						<div class="box-tools pull-right" id="Pagination"></div>
 
 					</div>
 					<!-- /.box-footer-->
@@ -238,7 +227,9 @@
 		<script th:src="@{/plugins/flot/jquery.flot.categories.min.js}"></script>
 		<script th:src="@{/plugins/ionslider/ion.rangeSlider.min.js}"></script>
 		<script th:src="@{/plugins/bootstrap-slider/bootstrap-slider.js}"></script>
+		<script th:src="@{/plugins/jQuery/jquery.pagination.js}"></script>
 		<script>
+			var isFirst=true;
 			$(function () {
 				select();
 
@@ -246,10 +237,11 @@
 
 			function select() {
 				var $selected = $(".form-control option:selected").val();
-				pages(1,$selected);
+				isFirst=true;
+				pagination(1,$selected);
 			}
 
-			function pages(pageNo,pageSize) {
+			function pagination(pageNo,pageSize) {
 				$.get("/user/"+pageNo+"/"+pageSize,function (data) {
 					$("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
 					$("#total2").text(" 当前第 "+data.pageNum+" 页");
@@ -263,26 +255,38 @@
 						var $td4 = $("<td>"+user.email+"</td>");
 						var $td5 = $("<td>"+user.phoneNum+"</td>");
 						var $td6 = $("<td>"+(user.status=='1'?'开启':'关闭')+"</td>");
-						var $td7 = $("<td class='text-center'>" +
-								"<a href='#' class='btn bg-olive btn-xs'>详情</a>" +
-								"<a href='#' class='btn bg-olive btn-xs'>添加角色</a></td>");
+						var $td7 = $("<td class='text-center'><a href='/user/"+user.id+"'" +
+								"class='btn bg-olive btn-xs'>详情</a>" +
+								"<a href='/userAddRole/"+user.id+"' class='btn bg-olive btn-xs'>添加角色</a></td>");
 						$tr.append($td1).append($td2).append($td3).append($td4).append($td5)
 								.append($td6).append($td7);
 						$tbody.append($tr);
 					})
-					var $ul = $("#pages");
-					$ul.empty();
-					var $li1 = $("<li><a href='#' onclick='pages(1,"+data.pageSize+")' aria-label='Previous'>首页</a></li>")
-					var $li2 = $("<li><a href='#' onclick='pages("+data.prePage+","+data.pageSize+")'>上一页</a></li>")
-					$ul.append($li1).append($li2)
-					for (var i=1;i<=data.pages;i++){
-						var $li = $("<li><a href='#' onclick='pages("+i+","+data.pageSize+")'>"+i+"</a></li>");
-						$ul.append($li);
+					if(isFirst){
+						initPagination(data.total,pageSize);//初始化分頁插件
+						isFirst=false;//第一次不要执行分页插件的回调函数
 					}
-					var $li3 = $("<li><a href='#' onclick='pages("+data.nextPage+","+data.pageSize+")'>下一页</a></li>")
-					var $li4 = $("<li><a href='#' onclick='pages("+data.pages+","+data.pageSize+")' aria-label='Next'>尾页</a></li>")
-					$ul.append($li3).append($li4)
 				})
+			}
+			function initPagination(total,pageSize) {
+				/*初始化插件*/
+				$("#Pagination").pagination(total, {
+					num_edge_entries: 1, //边缘页数
+					num_display_entries: 3, //主体按钮数
+					callback: pageselectCallback,  /*回调函数，当点击按钮的时候，就会调用指定的分页处理函数*/
+					items_per_page: pageSize, //每页显示记录数
+					prev_text: "前一页",
+					next_text: "后一页"
+				});
+
+				function pageselectCallback(page_index) {
+					//首次加载的时候不要再次执行分页函数，因为一开始的时候就先做了加载数据，第二次开始，当点击分页按钮的时候重新加载分页函数拿到下一页的数据
+					if (!isFirst) {
+						pagination(page_index + 1, pageSize);
+					}
+					isFirst = false;
+					return false;
+				}
 			}
 			$(document).ready(function() {
 				// 选择框

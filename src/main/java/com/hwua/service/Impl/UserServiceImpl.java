@@ -22,4 +22,19 @@ public class UserServiceImpl implements IUserService {
         PageInfo<User> pageInfo = new PageInfo<>(users);
         return pageInfo;
     }
+
+    @Override
+    public Integer addUser(User user) throws Exception {
+        return userMapper.addUser(user);
+    }
+
+    @Override
+    public User findUserById(String id) throws Exception {
+        return userMapper.findUserById(id);
+    }
+
+    @Override
+    public User findUserByName(String username) throws Exception {
+        return userMapper.findUserByName(username);
+    }
 }
