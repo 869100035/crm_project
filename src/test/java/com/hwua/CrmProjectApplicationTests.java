@@ -2,14 +2,8 @@ package com.hwua;
 
 import com.github.pagehelper.PageInfo;
 import com.hwua.mapper.RoleMapper;
-import com.hwua.pojo.Order;
-import com.hwua.pojo.Permission;
-import com.hwua.pojo.Role;
-import com.hwua.pojo.User;
-import com.hwua.service.IOrderService;
-import com.hwua.service.IPermissionService;
-import com.hwua.service.IRoleService;
-import com.hwua.service.IUserService;
+import com.hwua.pojo.*;
+import com.hwua.service.*;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +22,10 @@ class CrmProjectApplicationTests {
     private IPermissionService permissionService;
     @Autowired
     private IUserService userService;
-
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private ILuceneProductService luceneProductService;
     @Test
     void contextLoads() throws Exception{
 //        Integer res1 = permissionService.deleteRole_PermissionByRoleId("3e2e39a8-5e16-11ea-b047-507b9def5886");
@@ -47,6 +42,11 @@ class CrmProjectApplicationTests {
 //        list.add("3e2e39a8-5e16-11ea-b047-507b9def5886");
 //        System.out.println(roleMapper.delUsers_roleByUserId(id));
 //        System.out.println(roleMapper.addUsers_roleByUserId(list, id));
+//        luceneProductService.createIndex();
+//        luceneProductService.deleteIndex();
+//        List<Product> products = luceneProductService.searchProductByTerm("cityName", "上海", 10);
+//        System.out.println(products);
     }
+
 
 }

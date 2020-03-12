@@ -24,14 +24,14 @@
         </collection>
     </resultMap>
 
-    <delete id="deleteRoleById">
-        delete from role where id=#{id}
-    </delete>
-
     <select id="findRolesByUserId" resultMap="role_map">
         select r.id,roleName,roleDesc from role r left join users_role ur on r.id=ur.roleId
         left join users u on ur.userId=u.id where u.id=#{id}
     </select>
+
+    <delete id="deleteRoleById">
+        delete from role where id=#{id}
+    </delete>
 
     <delete id="delUsers_roleByUserId">
         delete from users_role where userId=#{id}

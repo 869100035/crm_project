@@ -5,6 +5,7 @@ import com.hwua.pojo.Permission;
 import com.hwua.pojo.Role;
 import com.hwua.service.IPermissionService;
 import com.hwua.service.IRoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +45,13 @@ public class RoleController {
 
     @DeleteMapping("/role")
     @ResponseBody
+    @RequiresPermissions(value = {"/role/delete"})
     public Integer deleteRoleById(String id)throws Exception{
         return roleService.deleteRoleById(id);
     }
 
     @GetMapping("/roleAddPer/{id}")
+    @RequiresPermissions(value = {"/role/delete"})
     public String findRoleAddPermission(@PathVariable("id")String id, Map<String,Object> map)throws Exception{
         Role role = roleService.findRoleById(id);
         List<Permission> rolePermissions = role.getList();

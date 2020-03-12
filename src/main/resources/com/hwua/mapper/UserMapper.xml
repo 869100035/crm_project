@@ -20,13 +20,13 @@
         </collection>
     </resultMap>
 
-    <insert id="addUser">
-        insert into users values(uuid(),#{email},#{username},#{password},#{phoneNum},#{status})
-    </insert>
-
     <select id="findUserById" resultMap="user_map">
         select id,email,username,password,phoneNum,status from users where id=#{id}
     </select>
+
+    <insert id="addUser">
+        insert into users values(uuid(),#{email},#{username},#{password},#{phoneNum},#{status})
+    </insert>
 
     <select id="findUserByName" resultMap="user_map">
         select id,email,username,password,phoneNum,status from users where username=#{username}

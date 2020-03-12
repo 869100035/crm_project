@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.hwua.mapper.UserMapper;
 import com.hwua.pojo.User;
 import com.hwua.service.IUserService;
+import com.hwua.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Integer addUser(User user) throws Exception {
+        user.setPassword(MD5Util.md5hash(user.getUsername(),user.getPassword()));
         return userMapper.addUser(user);
     }
 

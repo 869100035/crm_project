@@ -24,6 +24,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<Product> findAllProducts() throws Exception {
+        return productMapper.findAllProducts();
+    }
+
+    @Override
     public Integer addProduct(Product product) throws Exception {
         return productMapper.addProduct(product);
     }

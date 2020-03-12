@@ -6,6 +6,9 @@ import com.hwua.pojo.User;
 import com.hwua.service.IRoleService;
 import com.hwua.service.IUserService;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +26,36 @@ public class UserController {
     private IUserService userService;
     @Autowired
     private IRoleService roleService;
+
+    @PostMapping("/login")
+    public String login(User user,Map<String,Object> map)throws Exception{
+        String info = null;
+        Subject currentUser = SecurityUtils.getSubject();
+        if (!currentUser.isAuthenticated()){
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+            try {
+                //进行登录验证
+                currentUser.login(token);
+                //底层交给securityManager对象去调用注册得realm从文件或数据库中找到此登录用户的用户名和密码信息，拿到这些信息以后
+                //和token中的用户名、密码进行比对。
+            } catch (UnknownAccountException uae) {
+                info="不存在此用户";
+            } catch (IncorrectCredentialsException ice) {
+                info="密码不正确";
+            } catch (LockedAccountException lae) {
+                info="账号锁定";
+            } catch (AuthenticationException ae) {
+                info="联系管理员";
+            }
+        }
+        System.out.println(info);
+        if(info==null){
+            return "index";
+        }else{
+            map.put("info",info);
+            return "login";
+        }
+    }
 
     @GetMapping("/user/{pageNo}/{pageSize}")
     @ResponseBody

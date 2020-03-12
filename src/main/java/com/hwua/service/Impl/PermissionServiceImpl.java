@@ -49,6 +49,10 @@ public class PermissionServiceImpl implements IPermissionService {
         ObjectMapper mapper = new ObjectMapper();
         List<String> list =  mapper.readValue(listJson,List.class);
         permissionMapper.deleteRole_PermissionByRoleId(id);
-        return permissionMapper.addRole_PermissionByRoleId(list,id);
+        if (list.size()==0 || list==null){
+            return 0;
+        }else {
+            return permissionMapper.addRole_PermissionByRoleId(list,id);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.hwua.controller;
 import com.github.pagehelper.PageInfo;
 import com.hwua.pojo.Order;
 import com.hwua.service.IOrderService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

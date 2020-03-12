@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
 <head>
 <!-- 页面meta -->
 <meta charset="utf-8">
@@ -201,7 +202,7 @@
 									},
 									"返回当前":function () {
 										res.close();
-										window.location.href="/roleAdd/"+roleId;
+										window.location.href="/roleAddPer/"+roleId;
 									}
 								}
 							})

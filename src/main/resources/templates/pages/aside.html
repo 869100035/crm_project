@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
 <aside class="main-sidebar" id="main-sidebar">
 	<!-- sidebar: style can be found in sidebar.less -->
 	<section class="sidebar">
@@ -34,25 +35,25 @@
 
 
 				<ul class="treeview-menu">
-					<li id="system-setting">
-						<a
-						th:href="@{/user-list.html}"> <i
-							class="fa fa-circle-o"></i> 用户管理
-					</a>
+					<li shiro:hasRole="superAdmin" id="system-setting">
+						<a th:href="@{/user-list.html}">
+							<i class="fa fa-circle-o"></i> 用户管理
+						</a>
 					</li>
-					<li class="system-setting"><a
-						th:href="@{/role-list.html}"> <i
-							class="fa fa-circle-o"></i> 角色管理
-					</a></li>
-					<li class="system-setting"><a
-						th:href="@{/permission-list.html}">
+					<li shiro:hasAnyRoles="admin, superAdmin" class="system-setting">
+						<a th:href="@{/role-list.html}">
+							<i class="fa fa-circle-o"></i> 角色管理
+						</a>
+					</li>
+					<li shiro:hasAnyRoles="admin, superAdmin" class="system-setting">
+						<a th:href="@{/permission-list.html}">
 							<i class="fa fa-circle-o"></i> 资源权限管理
-					</a></li>
-					<li class="system-setting">
-						<a
-						href="${pageContext.request.contextPath}/pages/syslog-list.jsp"> <i
-							class="fa fa-circle-o"></i> 访问日志
-					</a>
+						</a>
+					</li>
+					<li shiro:hasAnyRoles="admin, superAdmin" class="system-setting">
+						<a href="#">
+							<i class="fa fa-circle-o"></i> 访问日志
+						</a>
 					</li>
 				</ul>
 
