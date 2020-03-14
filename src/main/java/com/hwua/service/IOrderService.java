@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IOrderService {
     PageInfo<Order> findAllOrders(Integer pageNo, Integer pageSize)throws Exception;
+    List<Order> findOrdersByProductId(String productId)throws Exception;
     Order findOrderById(String id)throws Exception;
     Integer updateOrderStatus(Integer status,String listJson)throws Exception;
     Integer deleteOrdersById(String listJson)throws Exception;

@@ -25,6 +25,11 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public List<Order> findOrdersByProductId(String productId) throws Exception {
+        return orderMapper.findOrdersByProductId(productId);
+    }
+
+    @Override
     public Order findOrderById(String id) throws Exception {
         return orderMapper.findOrderById(id);
     }

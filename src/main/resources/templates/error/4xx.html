@@ -2,9 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
 <head>
-    <title>权限</title>
+    <title>错误页面</title>
 </head>
 <body>
-    <h1>权限不足</h1>
+    <h1>资源可能不存在，请重新尝试</h1>
+    [[${timestamp}]]<br>
+    [[${status}]]<br>
+    [[${url}]]<br>
+    [[${message}]]<br>
 </body>
 </html>

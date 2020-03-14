@@ -55,13 +55,13 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				资源权限管理 <small>资源权限表单</small>
+				资源权限管理 <small>添加权限</small>
 			</h1>
 			<ol class="breadcrumb">
-				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
+				<li><a th:href="@{/main.html}"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a href="${pageContext.request.contextPath}/permission/findAll.do">资源权限管理</a></li>
-				<li class="active">资源权限表单</li>
+				<li><a th:href="@{/permission-list.html}">权限管理</a></li>
+				<li class="active">添加权限</li>
 			</ol>
 			</section>
 			<!-- 内容头部 /-->

@@ -12,4 +12,5 @@ public interface IUserService {
     Integer addUser(User user)throws Exception;
     User findUserById(String id)throws Exception;
     User findUserByName(String username)throws Exception;
+    Integer updatePassword(User user)throws Exception;
 }

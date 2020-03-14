@@ -1,10 +1,12 @@
 package com.hwua.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.hwua.exception.SysException;
 import com.hwua.pojo.Role;
 import com.hwua.pojo.User;
 import com.hwua.service.IRoleService;
 import com.hwua.service.IUserService;
+import com.hwua.util.MD5Util;
 import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -48,7 +50,6 @@ public class UserController {
                 info="联系管理员";
             }
         }
-        System.out.println(info);
         if(info==null){
             return "index";
         }else{
@@ -100,5 +101,24 @@ public class UserController {
     @ResponseBody
     public Integer addUser(User user)throws Exception{
         return userService.addUser(user);
+    }
+
+    @PostMapping("/updateUserPassword")
+    @ResponseBody
+    public String updatePassword(User user)throws Exception{
+        User realUser = userService.findUserByName(user.getUsername());
+        if (realUser==null
+            ||!user.getEmail().equals(realUser.getEmail())
+            ||!user.getPhoneNum().equals(realUser.getPhoneNum())){
+            return "用户信息有误";
+        }else {
+            realUser.setPassword(MD5Util.md5hash(user.getUsername(),user.getPassword()));
+            Integer res = userService.updatePassword(realUser);
+            if (res==1){
+                return "修改成功";
+            }else {
+                return "修改失败";
+            }
+        }
     }
 }

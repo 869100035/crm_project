@@ -39,4 +39,9 @@ public class UserServiceImpl implements IUserService {
     public User findUserByName(String username) throws Exception {
         return userMapper.findUserByName(username);
     }
+
+    @Override
+    public Integer updatePassword(User user) throws Exception {
+        return userMapper.updatePassword(user);
+    }
 }

@@ -22,18 +22,14 @@
 		<ul class="sidebar-menu">
 			<li class="header">菜单</li>
 			<li id="admin-index"><a
-				href="${pageContext.request.contextPath}/pages/main.jsp"><i
+				th:href="@{/main.html}"><i
 					class="fa fa-dashboard"></i> <span>首页</span></a></li>
-
-			<li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-					<span>系统管理</span> <span class="pull-right-container"> <i
-						class="fa fa-angle-left pull-right"></i>
-				</span>
-
-
-			</a>
-
-
+			<li class="treeview">
+				<a href="#"> <i class="fa fa-cogs"></i>
+					<span>系统管理</span> <span class="pull-right-container">
+						<i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
 				<ul class="treeview-menu">
 					<li shiro:hasRole="superAdmin" id="system-setting">
 						<a th:href="@{/user-list.html}">
@@ -51,7 +47,7 @@
 						</a>
 					</li>
 					<li shiro:hasAnyRoles="admin, superAdmin" class="system-setting">
-						<a href="#">
+						<a th:href="@{/syslog-list.html}">
 							<i class="fa fa-circle-o"></i> 访问日志
 						</a>
 					</li>
@@ -66,11 +62,11 @@
 				<ul class="treeview-menu">
 
 					<li class="system-setting"><a
-						th:href="@{product-list1.html}">
+						th:href="@{/product-list1.html}">
 							<i class="fa fa-circle-o"></i> 产品管理
 					</a></li>
 					<li class="system-setting"><a
-						th:href="@{orders-page-list.html}"> <i
+						th:href="@{/orders-page-list.html}"> <i
 							class="fa fa-circle-o"></i> 订单管理
 					</a></li>
 

@@ -45,13 +45,13 @@ public class RoleController {
 
     @DeleteMapping("/role")
     @ResponseBody
-    @RequiresPermissions(value = {"/role/delete"})
+//    @RequiresPermissions(value = {"/role/delete"})
     public Integer deleteRoleById(String id)throws Exception{
         return roleService.deleteRoleById(id);
     }
 
     @GetMapping("/roleAddPer/{id}")
-    @RequiresPermissions(value = {"/role/delete"})
+//    @RequiresPermissions(value = {"/role/delete"})
     public String findRoleAddPermission(@PathVariable("id")String id, Map<String,Object> map)throws Exception{
         Role role = roleService.findRoleById(id);
         List<Permission> rolePermissions = role.getList();
@@ -72,6 +72,7 @@ public class RoleController {
     @PutMapping("/role")
     @ResponseBody
     public Integer updateUser_RoleByUserId(String userId,String listJson)throws Exception{
+        System.out.println(userId+listJson);
         return roleService.updateUsers_roleByUserId(listJson,userId);
     }
 

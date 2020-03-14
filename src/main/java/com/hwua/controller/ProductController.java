@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.Map;
+
 @Controller
 public class ProductController {
 
@@ -20,6 +23,12 @@ public class ProductController {
         return productService.findAllProducts(pageNo,pageSize);
     }
 
+    @GetMapping("/product/{id}")
+    public String findProductByIdToUpdate(@PathVariable("id")String id, Map<String,Object> map)throws Exception{
+        Product product = productService.findProductById(id);
+        map.put("product",product);
+        return "pages/product-update";
+    }
     @PostMapping("/product")
     @ResponseBody
     public String addProduct(Product product)throws Exception{
@@ -32,9 +41,33 @@ public class ProductController {
         return productService.deleteProductById(listJson);
     }
 
-    @PutMapping("product")
+    @PutMapping("/product")
     @ResponseBody
     public Integer updateProductStatus(Integer status,String listJson)throws Exception{
         return productService.updateProductStatus(status,listJson);
+    }
+    @PostMapping("/productProperties")
+    @ResponseBody
+    public Integer updateProduct(Product product)throws Exception{
+        System.out.println(product);
+        return productService.updateProduct(product);
+    }
+
+
+    @GetMapping("/find_step1/{fieldName}/{term}")
+    public String addFieldNameAndTerm(@PathVariable("fieldName")String fieldName,
+                                      @PathVariable("term")String term,HttpSession session)throws Exception{
+        session.setAttribute("fieldName",fieldName);
+        session.setAttribute("term",term);
+        return "pages/product-list-search";
+    }
+
+    @GetMapping("/find_step2/{pageNo}/{pageSize}")
+    @ResponseBody
+    public PageInfo<Product> findProductsByTerm(@PathVariable("pageNo")Integer pageNo,
+                                                @PathVariable("pageSize")Integer pageSize,HttpSession session)throws Exception{
+        String fieldName = (String) session.getAttribute("fieldName");
+        String term = (String) session.getAttribute("term");
+        return productService.findAllProducts(fieldName,term,10,pageNo,pageSize);
     }
 }

@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
 	  xmlns:shiro="http://www.thymeleaf.org/thymeleaf-extras-shiro">
+<html>
+
 <head>
 <!-- 页面meta -->
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>角色权限</title>
+
+<title>订单页面列表</title>
 
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
 	name="viewport">
+
+	<script th:src="@{https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js}"></script>
+	<script th:src="@{https://oss.maxcdn.com/respond/1.4.2/respond.min.js}"></script>
 
 
 <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
@@ -36,90 +42,142 @@
 <link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/slider.css}">
 <link rel="stylesheet" th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css}">
 <link rel="stylesheet" th:href="@{/css/simpleAlert.css}">
+<link rel="stylesheet" th:href="@{/css/page.css}">
 </head>
 
 <body class="hold-transition skin-purple sidebar-mini">
 
 	<div class="wrapper">
-
 		<div th:replace="~{pages/header :: #main_header}"></div>
 		<div th:replace="~{pages/aside :: #main-sidebar}"></div>
-
-		<!-- 内容区域 -->
 		<div class="content-wrapper">
-
 			<!-- 内容头部 -->
 			<section class="content-header">
-			<h1>
-				角色管理 <small>添加权限</small>
-			</h1>
-			<ol class="breadcrumb">
-				<li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a th:href="@{/role-list.html}">角色管理</a></li>
-				<li class="active">添加权限</li>
-			</ol>
+				<h1>
+					基础数据 <small>订单管理</small>
+				</h1>
+				<ol class="breadcrumb">
+					<li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li><a th:href="@{/product-list1.html}">产品管理</a></li>
+					<li class="active">产品订单详情</li>
+				</ol>
 			</section>
 			<!-- 内容头部 /-->
 
-			<form>
-				<!-- 正文区域 -->
-				<section class="content"> 
-				
-				<input type="hidden" name="roleId" value="${role.id}">
-					<h4>注意：列表中已选中的是角色已有权限(取消会删除权限)</h4>
-					<input type="hidden" id="role_id" th:value="${role.id}">
-					<table id="dataList"
-							class="table table-bordered table-striped table-hover dataTable">
-							<thead>
-								<tr>
-									<th class="" style="padding-right: 0px">
-									<input id="selall" 
-										type="checkbox" class="icheckbox_square-blue"></th>
-									<th class="sorting_asc">ID</th>
-									<th class="sorting">权限名称</th>
-									<th class="sorting">权限URL</th>
-								</tr>
-							</thead>
-							<tbody id="tbody">
-								<tr th:each="permission:${rolePermissions}" >
-									<td><input name="ids" type="checkbox" checked="checked" th:value="${permission.id}"></td>
-									<td>[[${permissionStat.index+1}]]</td>
-									<td>[[${permission.permissionName }]]</td>
-									<td>[[${permission.url}]]</td>
-								</tr>
-								<tr th:each="permission:${permissions}" >
-									<td><input name="ids" type="checkbox"  th:value="${permission.id}"></td>
-									<td>[[${rolePermissions.size()+permissionStat.index+1}]]</td>
-									<td>[[${permission.permissionName }]]</td>
-									<td>[[${permission.url}]]</td>
-								</tr>
-							</tbody>
+			<!-- 正文区域 -->
+			<section class="content">
 
-						</table>
-				<!--订单信息/--> <!--工具栏-->
-				<div class="box-tools text-center">
-					<button type="button" class="btn bg-maroon" id="btn_add">保存</button>
-					<button type="button" class="btn bg-default"
-						onclick="history.back(-1);">返回</button>
+				<!-- .box-body -->
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">列表</h3>
+					</div>
+
+					<div class="box-body">
+
+						<!-- 数据表格 -->
+						<div class="table-box">
+
+							<!--工具栏-->
+							<div class="pull-left">
+								<div class="form-group form-inline">
+									<div class="btn-group">
+										<button type="button" class="btn btn-default" title="新建"
+											onclick="location.href='${pageContext.request.contextPath}/pages/product-add.jsp'">
+											<i class="fa fa-file-o"></i> 新建
+										</button>
+										<button type="button" class="btn btn-default" title="删除" id="btn_del">
+											<i class="fa fa-trash-o"></i> 删除
+										</button>
+										<button type="button" class="btn btn-default" title="开启" onclick="updateStatus(1)">
+											<i class="fa fa-check"></i> 开启
+										</button>
+										<button type="button" class="btn btn-default" title="屏蔽" onclick="updateStatus(0)">
+											<i class="fa fa-ban"></i> 屏蔽
+										</button>
+										<button type="button" class="btn btn-default" title="刷新" onclick="select()">
+											<i class="fa fa-refresh"></i> 刷新
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="box-tools pull-right">
+								<div class="has-feedback">
+									<input type="text" class="form-control input-sm"
+										placeholder="搜索"> <span
+										class="glyphicon glyphicon-search form-control-feedback"></span>
+								</div>
+							</div><br><br>
+							<!--工具栏/-->
+							<h4 style="text-align: center">总共 [[${orders.size()}]] 条此产品订单</h4>
+							<!--数据列表-->
+							<table id="dataList"
+								class="table table-bordered table-striped table-hover dataTable">
+								<thead>
+									<tr>
+										<th class="" style="padding-right: 0px;"><input
+											id="selall" type="checkbox" class="icheckbox_square-blue">
+										</th>
+										<th class="sorting_asc">ID</th>
+										<th class="sorting_desc">订单编号</th>
+										<th class="sorting_asc sorting_asc_disabled">产品名称</th>
+										<th class="sorting_desc sorting_desc_disabled">金额</th>
+										<th class="sorting">下单时间</th>
+										<th class="text-center sorting">订单状态</th>
+										<th class="text-center">操作</th>
+									</tr>
+								</thead>
+								<tbody >
+									<tr th:each="order:${orders}">
+										<td><input name="ids"  type="checkbox" th:value="${order.id}"></td>
+										<td>[[${(orderStat.index+1)}]]</td>
+										<td>[[${order.orderNum}]]</td>
+										<td>[[${order.product.productName}]]</td>
+										<td>[[${order.product.productPrice}]]</td>
+										<td>[[${order.orderTime}]]</td>
+										<td class='text-center'th:text="${order.orderStatus==1?'开启':'关闭'}"></td>
+										<td class='text-center'>
+											<button type='button' class='btn bg-olive btn-xs' onclick='detail(this)'>详情</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="box-tools text-center">
+
+								<button type="button" class="btn bg-default"
+										onclick="history.back(-1);">返回</button>
+							</div>
+							<!--数据列表/-->
+							<!--工具栏/-->
+						</div>
+						<!-- 数据表格 /-->
+					</div>
+					<!-- /.box-body -->
+
+					<!-- .box-footer-->
+                <!-- /.box-footer-->
+
 				</div>
-				<!--工具栏/--> </section>
-				<!-- 正文区域 /-->
-			</form>
+
+			</section>
+			<!-- 正文区域 /-->
+
 		</div>
+		<!-- @@close -->
 		<!-- 内容区域 /-->
 
 		<!-- 底部导航 -->
 		<footer class="main-footer">
-		<div class="pull-right hidden-xs">
-			<b>Version</b> 1.0.8
-		</div>
-		<strong>Copyright &copy; 2014-2017 <a
+			<div class="pull-right hidden-xs">
+				<b>Version</b> 1.0.8
+			</div>
+			<strong>Copyright &copy; 2014-2017 <a
 			href="http://www.hwua.com">上海海文信息技术有限公司</a>.
-		</strong> All rights reserved. </footer>
+			</strong> All rights reserved.
+		</footer>
 		<!-- 底部导航 /-->
 
 	</div>
-
 
 	<script th:src="@{/plugins/jQuery/jquery-2.2.3.min.js}"></script>
 	<script th:src="@{/plugins/jQueryUI/jquery-ui.min.js}"></script>
@@ -162,76 +220,77 @@
 	<script th:src="@{/plugins/flot/jquery.flot.categories.min.js}"></script>
 	<script th:src="@{/plugins/ionslider/ion.rangeSlider.min.js}"></script>
 	<script th:src="@{/plugins/bootstrap-slider/bootstrap-slider.js}"></script>
-	<script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+	<script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js}"></script>
+	<script th:src="@{/plugins/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
 	<script th:src="@{/plugins/jQuery/simpleAlert.js}"></script>
-<script>
-	$(function () {
-		$("#btn_add").click(function () {
+	<script th:src="@{/plugins/jQuery/jquery.pagination.js}"></script>
+	<script>
+
+		function detail(btn) {
+			var res = $(btn).parent().parent().find("input").val();
+			window.location.href="/order/"+res;
+		}
+		function updateStatus(status) {
 			var list = new Array();
 			$("input[name='ids']:checked").each(function (e) {
 				list.push($(this).val())
 			});
-			var listJson = JSON.stringify(list);
-			var roleId = $("#role_id").val();
-			var del = simpleAlert({
-				"content":"确修改此角色权限？",
+			var update = simpleAlert({
+				"content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个订单？",
 				"buttons":{
 					"确定":function(){
-						$.post("/permission",{"_method":"put","roleId":roleId,"listJson":listJson},function (data) {
+						var listJson = JSON.stringify(list)
+						$.post("/order",{"_method":"put","status":status,"listJson":listJson},function (data) {
 							var res = simpleAlert({
-								"content":"角色现共有"+data+"个权限",
+								"content":"成功"+(status==1?'开启':'屏蔽')+data+"个订单",
 								"closeAll":true,
 								"buttons":{
-									"查看详情":function () {
+									"确定":function () {
 										res.close();
-										window.location.href="/role/"+roleId;
-									},
-									"返回当前":function () {
-										res.close();
-										window.location.href="/roleAddPer/"+roleId;
+										window.location.reload();
 									}
 								}
 							})
 						});
 					},
 					"取消":function(){
-						del.close();
+						update.close();
 					}
 				}
 			})
-		})
-	})
-		$(document).ready(function() {
-			// 选择框
-			$(".select2").select2();
-
-			// WYSIHTML5编辑器
-			$(".textarea").wysihtml5({
-				locale : 'zh-CN'
-			});
-			// 全选操作
-			$("#selall").click(function() {
-				var clicks = $(this).is(':checked');
-				if (!clicks) {
-					$("#dataList td input[type='checkbox']").iCheck("uncheck");
-				} else {
-					$("#dataList td input[type='checkbox']").iCheck("check");
-				}
-				$(this).data("clicks", !clicks);
-			});
-		});
-
-		// 设置激活菜单
-		function setSidebarActive(tagUri) {
-			var liObj = $("#" + tagUri);
-			if (liObj.length > 0) {
-				liObj.parent().parent().addClass("active");
-				liObj.addClass("active");
-			}
+		}
+		function del() {
+			$("#btn_del").click(function(){
+				var list = new Array();
+				$("input[name='ids']:checked").each(function (e) {
+					list.push($(this).val())
+				});
+				var del = simpleAlert({
+					"content":"确定删除"+list.length+"个订单？",
+					"buttons":{
+						"确定":function(){
+							var listJson = JSON.stringify(list)
+							$.post("/order",{"_method":"delete","listJson":listJson},function (data) {
+								var res = simpleAlert({
+									"content":"成功删除"+data+"个订单",
+									"closeAll":true,
+									"buttons":{
+										"确定":function () {
+											res.close();
+											window.location.reload();
+										}
+									}
+								})
+							});
+						},
+						"取消":function(){
+							del.close();
+						}
+					}
+				})
+			})
 		}
 	</script>
-
-
 </body>
 
 </html>

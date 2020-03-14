@@ -23,6 +23,7 @@ public class OrderController {
                                          @PathVariable("pageSize")Integer pageSize)throws Exception{
          return orderService.findAllOrders(pageNo,pageSize);
     }
+
     @GetMapping("/order/{id}")
     public String findOrderById(@PathVariable("id")String id, Map<String,Object> map)throws Exception{
         Order order = orderService.findOrderById(id);
@@ -40,6 +41,14 @@ public class OrderController {
     @ResponseBody
     public Integer deleteOrdersById(String listJson)throws Exception{
         return orderService.deleteOrdersById(listJson);
+    }
+
+    @GetMapping("/ordersByProId/{productId}")
+    public String findOrdersByProductId(@PathVariable("productId") String productId,
+                                        Map<String,Object> map)throws Exception{
+        List<Order> orders = orderService.findOrdersByProductId(productId);
+        map.put("orders",orders);
+        return "pages/orders-by-productId";
     }
 }
 

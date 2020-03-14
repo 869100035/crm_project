@@ -56,8 +56,8 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="javascript:window.location.reload()">产品管理</a></li>
-                <li class="active">全部产品</li>
+                <li><a th:href="@{/product-list1.html}">产品管理</a></li>
+                <li class="active">搜索列表</li>
             </ol>
         </section>
         <!-- 内容头部 /-->
@@ -67,7 +67,7 @@
             <!-- .box-body -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">产品列表</h3>
+                    <h3 class="box-title">搜索列表</h3>
                 </div>
                 <div class="box-body">
                     <!-- 数据表格 -->
@@ -147,6 +147,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <h3 id="span_no" style="color:#0e8f99;text-align: center"></h3>
                     </div>
                 </div>
                 <div class="box-footer">
@@ -167,6 +168,7 @@
                 </div>
                 <!-- /.box-footer-->
             </div>
+
         </section>
         <!-- 正文区域 /-->
 
@@ -185,12 +187,15 @@
         <strong>Copyright &copy; 2014-2017 <a href="http://www.hwua.com">上海海文信息技术有限公司</a>.</strong> All rights reserved.
     </footer>
     <!-- 底部导航 /-->
+
 </div>
 
 
 <script th:src="@{/plugins/jQuery/jquery-2.2.3.min.js}"></script>
 <script th:src="@{/plugins/jQueryUI/jquery-ui.min.js}"></script>
-<script>$.widget.bridge('uibutton', $.ui.button);</script>
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
 <script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/plugins/raphael/raphael-min.js}"></script>
 <script th:src="@{/plugins/morris/morris.min.js}"></script>
@@ -245,33 +250,38 @@
         pagination(1,$selected);
     }
     function pagination(pageNo,pageSize) {
-        $.get("/product/"+pageNo+"/"+pageSize,function (data) {
+        $.get("/find_step2/"+pageNo+"/"+pageSize,function (data) {
             $("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
             $("#total2").text(" 当前第 "+data.pageNum+" 页");
             var $tbody = $("#tbody");
             $tbody.empty();
-            $.each(data.list,function (index,product) {
-                var $tr = $("<tr></tr>");
-                var $td1 = $("<td><input name='ids' type='checkbox' value='"+product.id+"'></td>");
-                var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
-                var $td3 = $("<td>"+product.productNum+"</td>");
-                var $td4 = $("<td>"+product.productName+"</td>");
-                var $td5 = $("<td>"+product.cityName+"</td>");
-                var $td6 = $("<td>"+product.departureTime+"</td>");
-                var $td7 = $("<td class='text-center'>"+product.productPrice+"</td>");
-                var $td8 = $("<td class='text-center'>"+product.productDesc+"</td>");
-                var $td9 = $("<td class='text-center'>"+(product.productStatus=='1'?'开启':'关闭')+"</td>");
-                var $td10 = $("<td class='text-center'>" +
-                    "<button type='button' class='btn bg-olive btn-xs' onclick='queryOrder(this)'>订单</button>" +
-                    "<button type='button' class='btn bg-olive btn-xs' onclick='updatePro(this)'>编辑</button></td>");
-                $tr.append($td1).append($td2).append($td3).append($td4).append($td5)
-                    .append($td6).append($td7).append($td8).append($td9).append($td10);
-                $tbody.append($tr);
-            })
-            if(isFirst){
-                initPagination(data.total,pageSize);//初始化分頁插件
-                isFirst=false;//第一次不要执行分页插件的回调函数
+            if (data.list==null||data.list.length==0){
+                $("#span_no").append($("<span>无相关产品，请重新搜索</span>"));
+            }else {
+                $.each(data.list,function (index,product) {
+                    var $tr = $("<tr></tr>");
+                    var $td1 = $("<td><input name='ids' type='checkbox' value='"+product.id+"'></td>");
+                    var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
+                    var $td3 = $("<td>"+product.productNum+"</td>");
+                    var $td4 = $("<td>"+product.productName+"</td>");
+                    var $td5 = $("<td>"+product.cityName+"</td>");
+                    var $td6 = $("<td>"+product.departureTime+"</td>");
+                    var $td7 = $("<td class='text-center'>"+product.productPrice+"</td>");
+                    var $td8 = $("<td class='text-center'>"+product.productDesc+"</td>");
+                    var $td9 = $("<td class='text-center'>"+(product.productStatus=='1'?'开启':'关闭')+"</td>");
+                    var $td10 = $("<td class='text-center'>" +
+                        "<button type='button' class='btn bg-olive btn-xs' onclick='queryOrder(this)'>订单</button>" +
+                        "<button type='button' class='btn bg-olive btn-xs' onclick='updatePro(this)'>编辑</button></td>");
+                    $tr.append($td1).append($td2).append($td3).append($td4).append($td5)
+                        .append($td6).append($td7).append($td8).append($td9).append($td10);
+                    $tbody.append($tr);
+                })
+                if(isFirst){
+                    initPagination(data.total,pageSize);//初始化分頁插件
+                    isFirst=false;//第一次不要执行分页插件的回调函数
+                }
             }
+
         })
     }
     function initPagination(total,pageSize) {
@@ -293,14 +303,6 @@
             isFirst = false;
             return false;
         }
-    }
-    function queryOrder(btn) {
-        var id = $(btn).parent().parent().find("input").val();
-        window.location.href="/ordersByProId/"+id;
-    }
-    function updatePro(btn) {
-        var id = $(btn).parent().parent().find("input").val();
-        window.location.href="/product/"+id;
     }
     function del() {
         $("#btn_del").click(function(){
@@ -362,6 +364,14 @@
             }
         });
     }
+    function queryOrder(btn) {
+        var id = $(btn).parent().parent().find("input").val();
+        window.location.href="/ordersByProId/"+id;
+    }
+    function updatePro(btn) {
+        var id = $(btn).parent().parent().find("input").val();
+        window.location.href="/product/"+id;
+    }
     function find() {
         var fieldName = $("#filedName option:selected").val();
         var term = $("#term").val();
@@ -370,5 +380,49 @@
         }
     }
 </script>
+<script>
+    $(document).ready(function () {
+        // 选择框
+        $(".select2").select2();
+        // WYSIHTML5编辑器
+        $(".textarea").wysihtml5({
+            locale: 'zh-CN'
+        });
+    });
+
+
+    // 设置激活菜单
+    function setSidebarActive(tagUri) {
+        var liObj = $("#" + tagUri);
+        if (liObj.length > 0) {
+            liObj.parent().parent().addClass("active");
+            liObj.addClass("active");
+        }
+    }
+
+
+    $(document).ready(function () {
+
+        // 激活导航位置
+        setSidebarActive("admin-datalist");
+
+        // 列表按钮
+        $("#dataList td input[type='checkbox']").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            increaseArea: '20%'
+        });
+        // 全选操作
+        $("#selall").click(function () {
+            var clicks = $(this).is(':checked');
+            if (!clicks) {
+                $("#dataList td input[type='checkbox']").iCheck("uncheck");
+            } else {
+                $("#dataList td input[type='checkbox']").iCheck("check");
+            }
+            $(this).data("clicks", !clicks);
+        });
+    });
+</script>
 </body>
+
 </html>

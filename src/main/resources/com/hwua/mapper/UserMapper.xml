@@ -31,4 +31,8 @@
     <select id="findUserByName" resultMap="user_map">
         select id,email,username,password,phoneNum,status from users where username=#{username}
     </select>
+
+    <update id="updatePassword">
+        update users set password=#{password} where id=#{id}
+    </update>
 </mapper>

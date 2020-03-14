@@ -57,9 +57,9 @@
 					基础数据 <small>订单管理</small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
-					<li><a href="#">基础数据</a></li>
-					<li class="active">订单管理</li>
+					<li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
+					<li><a th:href="@{/orders-page-list.html}">订单管理</a></li>
+					<li class="active">全部订单</li>
 				</ol>
 			</section>
 			<!-- 内容头部 /-->
@@ -70,7 +70,7 @@
 				<!-- .box-body -->
 				<div class="box box-primary">
 					<div class="box-header with-border">
-						<h3 class="box-title">列表</h3>
+						<h3 class="box-title">订单列表</h3>
 					</div>
 
 					<div class="box-body">
@@ -82,10 +82,10 @@
 							<div class="pull-left">
 								<div class="form-group form-inline">
 									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建"
-											onclick="location.href='${pageContext.request.contextPath}/pages/product-add.jsp'">
-											<i class="fa fa-file-o"></i> 新建
-										</button>
+<!--										<button type="button" class="btn btn-default" title="新建"-->
+<!--											onclick="location.href='${pageContext.request.contextPath}/pages/product-add.jsp'">-->
+<!--											<i class="fa fa-file-o"></i> 新建-->
+<!--										</button>-->
 										<button type="button" class="btn btn-default" title="删除" id="btn_del">
 											<i class="fa fa-trash-o"></i> 删除
 										</button>
@@ -242,7 +242,6 @@
 			isFirst=true;
 			pagination(1,$selected);
 		}
-
 		function pagination(pageNo,pageSize) {
 			$.get("/order/"+pageNo+"/"+pageSize,function (data) {
 				$("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
@@ -258,10 +257,9 @@
 					var $td5 = $("<td>"+order.product.productPrice+"</td>");
 					var $td6 = $("<td>"+order.orderTime+"</td>");
 					var $td7 = $("<td class='text-center'>"+(order.orderStatus=='1'?'开启':'关闭')+"</td>");
-					var $td8 = $("<td class='text-center'>" +
-							"<button type='button' class='btn bg-olive btn-xs'>订单</button>" +
+					var $td8 = $("<td class='text-center'>"+
 							"<button type='button' class='btn bg-olive btn-xs' onclick='detail(this)'>详情</button>" +
-							"<button type='button' class='btn bg-olive btn-xs'>编辑</button></td>");
+							"</td>");
 					$tr.append($td1).append($td2).append($td3).append($td4)
 							.append($td5).append($td6).append($td7).append($td8);
 					$tbody.append($tr);
@@ -302,13 +300,13 @@
 				list.push($(this).val())
 			});
 			var update = simpleAlert({
-				"content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个产品？",
+				"content":"确定"+(status==1?'开启':'屏蔽')+list.length+"个订单？",
 				"buttons":{
 					"确定":function(){
 						var listJson = JSON.stringify(list)
 						$.post("/order",{"_method":"put","status":status,"listJson":listJson},function (data) {
 							var res = simpleAlert({
-								"content":"成功"+(status==1?'开启':'屏蔽')+data+"个产品",
+								"content":"成功"+(status==1?'开启':'屏蔽')+data+"个订单",
 								"closeAll":true,
 								"buttons":{
 									"确定":function () {
@@ -332,13 +330,13 @@
 					list.push($(this).val())
 				});
 				var del = simpleAlert({
-					"content":"确定删除"+list.length+"个产品？",
+					"content":"确定删除"+list.length+"个订单？",
 					"buttons":{
 						"确定":function(){
 							var listJson = JSON.stringify(list)
 							$.post("/order",{"_method":"delete","listJson":listJson},function (data) {
 								var res = simpleAlert({
-									"content":"成功删除"+data+"个产品",
+									"content":"成功删除"+data+"个订单",
 									"closeAll":true,
 									"buttons":{
 										"确定":function () {
@@ -356,54 +354,6 @@
 				})
 			})
 		}
-		function changePageSize() {
-			//获取下拉框的值
-			var pageSize = $("#changePageSize").val();
-
-			//向服务器发送请求，改变没页显示条数
-			location.href = "${pageContext.request.contextPath}/orders/findAll.do?page=1&size="
-					+ pageSize;
-		}
-		$(document).ready(function() {
-			// 选择框
-			$(".select2").select2();
-
-			// WYSIHTML5编辑器
-			$(".textarea").wysihtml5({
-				locale : 'zh-CN'
-			});
-		});
-
-		// 设置激活菜单
-		function setSidebarActive(tagUri) {
-			var liObj = $("#" + tagUri);
-			if (liObj.length > 0) {
-				liObj.parent().parent().addClass("active");
-				liObj.addClass("active");
-			}
-		}
-
-		$(document).ready(function() {
-
-			// 激活导航位置
-			setSidebarActive("admin-datalist");
-
-			// 列表按钮 
-			$("#dataList td input[type='checkbox']").iCheck({
-				checkboxClass : 'icheckbox_square-blue',
-				increaseArea : '20%'
-			});
-			// 全选操作 
-			$("#selall").click(function() {
-				var clicks = $(this).is(':checked');
-				if (!clicks) {
-					$("#dataList td input[type='checkbox']").iCheck("uncheck");
-				} else {
-					$("#dataList td input[type='checkbox']").iCheck("check");
-				}
-				$(this).data("clicks", !clicks);
-			});
-		});
 	</script>
 </body>
 

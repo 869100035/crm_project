@@ -13,63 +13,37 @@
 	content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"
 	name="viewport">
 
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/ionicons/css/ionicons.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/iCheck/square/blue.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/morris/morris.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/datepicker/datepicker3.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/daterangepicker/daterangepicker.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/datatables/dataTables.bootstrap.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/treeTable/jquery.treetable.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/treeTable/jquery.treetable.theme.default.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/select2/select2.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/colorpicker/bootstrap-colorpicker.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/adminLTE/css/AdminLTE.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/adminLTE/css/skins/_all-skins.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/style.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.skinNice.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/font-awesome/css/font-awesome.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/ionicons/css/ionicons.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/iCheck/square/blue.css}">
+<link rel="stylesheet" th:href="@{/plugins/morris/morris.css}">
+<link rel="stylesheet" th:href="@{/plugins/jvectormap/jquery-jvectormap-1.2.2.css}">
+<link rel="stylesheet" th:href="@{/plugins/datepicker/datepicker3.css}">
+<link rel="stylesheet" th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/datatables/dataTables.bootstrap.css}">
+<link rel="stylesheet" th:href="@{/plugins/treeTable/jquery.treetable.css}">
+<link rel="stylesheet" th:href="@{/plugins/treeTable/jquery.treetable.theme.default.css}">
+<link rel="stylesheet" th:href="@{/plugins/select2/select2.css}">
+<link rel="stylesheet" th:href="@{/plugins/colorpicker/bootstrap-colorpicker.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap-markdown/css/bootstrap-markdown.min.css}">
+<link rel="stylesheet" th:href="@{/plugins/adminLTE/css/AdminLTE.css}">
+<link rel="stylesheet" th:href="@{/plugins/adminLTE/css/skins/_all-skins.min.css}">
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.css}">
+<link rel="stylesheet" th:href="@{/plugins/ionslider/ion.rangeSlider.skinNice.css}">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap-slider/slider.css}">
+<link rel="stylesheet" th:href="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css}">
+<link rel="stylesheet" th:href="@{/css/page.css}">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
 
 	<div class="wrapper">
 
-		<!-- 页面头部 -->
-		<jsp:include page="header.html"></jsp:include>
-		<!-- 页面头部 /-->
-
-		<!-- 导航侧栏 -->
-		<jsp:include page="aside.html"></jsp:include>
-		<!-- 导航侧栏 /-->
+		<div th:replace="~{pages/header :: #main_header}"></div>
+		<div th:replace="~{pages/aside :: #main-sidebar}"></div>
 
 		<!-- 内容区域 -->
 		<div class="content-wrapper">
@@ -80,11 +54,8 @@
 				日志管理 <small>全部日志</small>
 			</h1>
 			<ol class="breadcrumb">
-				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
-						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a
-					href="${pageContext.request.contextPath}/sysLog/findAll.do">日志管理</a></li>
-
+				<li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
+				<li><a href="javascript:window.location.reload()">日志管理</a></li>
 				<li class="active">全部日志</li>
 			</ol>
 			</section>
@@ -134,47 +105,17 @@
 									<th class="sorting">访问用户</th>
 									<th class="sorting">访问IP</th>
 									<th class="sorting">资源URL</th>
-									<th class="sorting">执行时间</th>
+									<th class="sorting">执行时间(ms)</th>
 									<th class="sorting">访问方法</th>
 								</tr>
 							</thead>
-							<tbody>
-								<c:forEach items="${sysLogs}" var="syslog">
-									<tr>
-										<td><input name="ids" type="checkbox"></td>
-										<td>${syslog.id}</td>
-										<td>${syslog.visitTimeStr }</td>
-										<td>${syslog.username }</td>
-										<td>${syslog.ip }</td>
-										<td>${syslog.url}</td>
-										<td>${syslog.executionTime}毫秒</td>
-										<td>${syslog.method}</td>										
-									</tr>
-								</c:forEach>
+							<tbody id="tbody">
+
 							</tbody>
 
 						</table>
 						<!--数据列表/-->
 
-						<!--工具栏-->
-						<div class="pull-left">
-							<div class="form-group form-inline">
-								<div class="btn-group">
-									<button type="button" class="btn btn-default" title="刷新"
-										onclick="window.location.reload();">
-										<i class="fa fa-refresh"></i> 刷新
-									</button>
-								</div>
-							</div>
-						</div>
-						<div class="box-tools pull-right">
-							<div class="has-feedback">
-								<input type="text" class="form-control input-sm"
-									placeholder="搜索"> <span
-									class="glyphicon glyphicon-search form-control-feedback"></span>
-							</div>
-						</div>
-						<!--工具栏/-->
 
 
 					</div>
@@ -187,30 +128,19 @@
 				<div class="box-footer">
 					<div class="pull-left">
 						<div class="form-group form-inline">
-							总共2 页，共14 条数据。 每页 <select class="form-control">
+							<span id="total"></span>
+							<select class="form-control" onchange="select()">
 								<option>10</option>
-								<option>15</option>
+								<option selected="selected">15</option>
 								<option>20</option>
 								<option>50</option>
 								<option>80</option>
 							</select> 条
+							<span id="total2"></span>
 						</div>
 					</div>
 
-					<div class="box-tools pull-right">
-						<ul class="pagination">
-							<li><a href="#" aria-label="Previous">首页</a></li>
-							<li><a href="#">上一页</a></li>
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li><a href="#" aria-label="Next">尾页</a></li>
-						</ul>
-					</div>
-
+					<div id="Pagination"></div>
 				</div>
 				<!-- /.box-footer-->
 
@@ -234,93 +164,105 @@
 
 	</div>
 
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
+	<script th:src="@{/plugins/jQuery/jquery-2.2.3.min.js}"></script>
+	<script th:src="@{/plugins/jQueryUI/jquery-ui.min.js}"></script>
+	<script>$.widget.bridge('uibutton', $.ui.button);</script>
+	<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+	<script th:src="@{/plugins/raphael/raphael-min.js}"></script>
+	<script th:src="@{/plugins/morris/morris.min.js}"></script>
+	<script th:src="@{/plugins/sparkline/jquery.sparkline.min.js}"></script>
+	<script th:src="@{/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js}"></script>
+	<script th:src="@{/plugins/jvectormap/jquery-jvectormap-world-mill-en.js}"></script>
+	<script th:src="@{/plugins/knob/jquery.knob.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/moment.min.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+	<script th:src="@{/plugins/daterangepicker/daterangepicker.zh-CN.js}"></script>
+	<script th:src="@{/plugins/datepicker/bootstrap-datepicker.js}"></script>
+	<script th:src="@{/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js}"></script>
+	<script th:src="@{/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js}"></script>
+	<script th:src="@{/plugins/slimScroll/jquery.slimscroll.min.js}"></script>
+	<script th:src="@{/plugins/fastclick/fastclick.js}"></script>
+	<script th:src="@{/plugins/iCheck/icheck.min.js}"></script>
+	<script th:src="@{/plugins/adminLTE/js/app.min.js}"></script>
+	<script th:src="@{/plugins/treeTable/jquery.treetable.js}"></script>
+	<script th:src="@{/plugins/select2/select2.full.min.js}"></script>
+	<script th:src="@{/plugins/colorpicker/bootstrap-colorpicker.min.js}"></script>
+	<script th:src="@{/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js}"></script>
+	<script th:src="@{/plugins/bootstrap-markdown/js/bootstrap-markdown.js}"></script>
+	<script th:src="@{/plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js}"></script>
+	<script th:src="@{/plugins/bootstrap-markdown/js/markdown.js}"></script>
+	<script th:src="@{/plugins/bootstrap-markdown/js/to-markdown.js}"></script>
+	<script th:src="@{/plugins/ckeditor/ckeditor.js}"></script>
+	<script th:src="@{/plugins/input-mask/jquery.inputmask.js}"></script>
+	<script th:src="@{/plugins/input-mask/jquery.inputmask.date.extensions.js}"></script>
+	<script th:src="@{/plugins/input-mask/jquery.inputmask.extensions.js}"></script>
+	<script th:src="@{/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/plugins/datatables/dataTables.bootstrap.min.js}"></script>
+	<script th:src="@{/plugins/chartjs/Chart.min.js}"></script>
+	<script th:src="@{/plugins/flot/jquery.flot.min.js}"></script>
+	<script th:src="@{/plugins/flot/jquery.flot.resize.min.js}"></script>
+	<script th:src="@{/plugins/flot/jquery.flot.pie.min.js}"></script>
+	<script th:src="@{/plugins/flot/jquery.flot.categories.min.js}"></script>
+	<script th:src="@{/plugins/ionslider/ion.rangeSlider.min.js}"></script>
+	<script th:src="@{/plugins/bootstrap-slider/bootstrap-slider.js}"></script>
+	<script th:src="@{/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
+	<script th:src="@{/plugins/jQuery/jquery.pagination.js}"></script>
 	<script>
-		$.widget.bridge('uibutton', $.ui.button);
-	</script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/raphael/raphael-min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/morris/morris.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/sparkline/jquery.sparkline.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/knob/jquery.knob.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/daterangepicker/moment.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/daterangepicker/daterangepicker.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/daterangepicker/daterangepicker.zh-CN.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/datepicker/bootstrap-datepicker.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/fastclick/fastclick.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/iCheck/icheck.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/adminLTE/js/app.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/treeTable/jquery.treetable.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/select2/select2.full.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.zh-CN.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/locale/bootstrap-markdown.zh.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/markdown.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-markdown/js/to-markdown.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/chartjs/Chart.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.resize.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.pie.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/flot/jquery.flot.categories.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+		var isFirst=true;
+		$(function () {
+			select();
+		});
+		function select() {
+			var $selected = $(".form-control option:selected").val();
+			isFirst=true
+			pagination(1,$selected);
+		}
+		function pagination(pageNo,pageSize) {
+			$.get("/syslog/"+pageNo+"/"+pageSize,function (data) {
+				$("#total").text("总共"+data.pages+"页,共"+data.total+"条数据，每页");
+				$("#total2").text(" 当前第 "+data.pageNum+" 页");
+				var $tbody = $("#tbody");
+				$tbody.empty();
+				$.each(data.list,function (index,syslog) {
+					var $tr = $("<tr></tr>");
+					var $td1 = $("<td><input name='ids' type='checkbox' value='"+syslog.id+"'></td>");
+					var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
+					var $td3 = $("<td>"+syslog.visitTime+"</td>");
+					var $td4 = $("<td>"+syslog.username+"</td>");
+					var $td5 = $("<td>"+syslog.ip+"</td>");
+					var $td6 = $("<td>"+syslog.url+"</td>");
+					var $td7 = $("<td style='text-align: center'>"+syslog.executionTime+"毫秒</td>");
+					var $td8 = $("<td>"+syslog.method+"</td>");
+					$tr.append($td1).append($td2).append($td3).append($td4).append($td5)
+							.append($td6).append($td7).append($td8);
+					$tbody.append($tr);
+				})
+				if(isFirst){
+					initPagination(data.total,pageSize);//初始化分頁插件
+					isFirst=false;//第一次不要执行分页插件的回调函数
+				}
+			})
+		}
+		function initPagination(total,pageSize) {
+			/*初始化插件*/
+			$("#Pagination").pagination(total, {
+				num_edge_entries: 1, //边缘页数
+				num_display_entries: 3, //主体按钮数
+				callback: pageselectCallback,  /*回调函数，当点击按钮的时候，就会调用指定的分页处理函数*/
+				items_per_page: pageSize, //每页显示记录数
+				prev_text: "前一页",
+				next_text: "后一页"
+			});
 
-	<script>
+			function pageselectCallback(page_index) {
+				//首次加载的时候不要再次执行分页函数，因为一开始的时候就先做了加载数据，第二次开始，当点击分页按钮的时候重新加载分页函数拿到下一页的数据
+				if (!isFirst) {
+					pagination(page_index + 1, pageSize);
+				}
+				isFirst = false;
+				return false;
+			}
+		}
 		$(document).ready(function() {
 			// 选择框
 			$(".select2").select2();

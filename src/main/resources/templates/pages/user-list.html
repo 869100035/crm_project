@@ -53,11 +53,8 @@
 				用户管理 <small>全部用户</small>
 			</h1>
 			<ol class="breadcrumb">
-				<li><a th:href="@{/index.js}"><i
-						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a
-					th:href="@{/pages/user-list.js}">用户管理</a></li>
-
+				<li><a th:href="@{/main.html}"><i class="fa fa-dashboard"></i> 首页</a></li>
+				<li><a th:href="@{/user-list.html}">用户管理</a></li>
 				<li class="active">全部用户</li>
 			</ol>
 			</section>
@@ -308,40 +305,6 @@
 				}
 			}
 
-			$(document)
-					.ready(
-							function() {
-
-								// 激活导航位置
-								setSidebarActive("admin-datalist");
-
-								// 列表按钮 
-								$("#dataList td input[type='checkbox']")
-										.iCheck(
-												{
-													checkboxClass : 'icheckbox_square-blue',
-													increaseArea : '20%'
-												});
-								// 全选操作 
-								$("#selall")
-										.click(
-												function() {
-													var clicks = $(this).is(
-															':checked');
-													if (!clicks) {
-														$(
-																"#dataList td input[type='checkbox']")
-																.iCheck(
-																		"uncheck");
-													} else {
-														$(
-																"#dataList td input[type='checkbox']")
-																.iCheck("check");
-													}
-													$(this).data("clicks",
-															!clicks);
-												});
-							});
 		</script>
 </body>
 

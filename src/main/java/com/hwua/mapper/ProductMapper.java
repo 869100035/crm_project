@@ -9,7 +9,7 @@ import java.util.List;
 @Component
 public interface ProductMapper {
     List<Product> findAllProducts()throws Exception;
-    Product findProductById()throws Exception;
+    Product findProductById(String id)throws Exception;
     Integer addProduct(Product product)throws Exception;
     Integer deleteProductById(List<String> list)throws Exception;
     Integer updateProduct(Product product)throws Exception;

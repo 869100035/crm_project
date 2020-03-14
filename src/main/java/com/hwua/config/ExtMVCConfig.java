@@ -13,7 +13,7 @@ public class ExtMVCConfig {
             @Override
             public void addViewControllers(ViewControllerRegistry registry) {
             registry.addViewController("/login.html").setViewName("login");
-            registry.addViewController("/register.html").setViewName("register");
+            registry.addViewController("/updatePassword.html").setViewName("updatePassword");
             registry.addViewController("/index.html").setViewName("index");
             registry.addViewController("/main.html").setViewName("pages/main");
             registry.addViewController("/header.html").setViewName("pages/header");
@@ -31,7 +31,7 @@ public class ExtMVCConfig {
             registry.addViewController("/permission-list.html").setViewName("pages/permission-list");
             registry.addViewController("/permission-add.html").setViewName("pages/permission-add");
             registry.addViewController("/permission-show.html").setViewName("pages/permission-show");
-
+            registry.addViewController("/syslog-list.html").setViewName("pages/syslog-list");
 
             }
         };
