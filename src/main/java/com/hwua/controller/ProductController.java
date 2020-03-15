@@ -1,13 +1,16 @@
 package com.hwua.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hwua.pojo.Product;
+import com.hwua.service.ILuceneProductService;
 import com.hwua.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -15,6 +18,8 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+    @Autowired
+    private ILuceneProductService luceneProductService;
 
     @GetMapping("/product/{pageNo}/{pageSize}")
     @ResponseBody
@@ -68,6 +73,9 @@ public class ProductController {
                                                 @PathVariable("pageSize")Integer pageSize,HttpSession session)throws Exception{
         String fieldName = (String) session.getAttribute("fieldName");
         String term = (String) session.getAttribute("term");
-        return productService.findAllProducts(fieldName,term,10,pageNo,pageSize);
+        PageHelper.startPage(pageNo,pageSize);
+        List<Product> products = luceneProductService.searchProductByTerm(fieldName, term, 10);
+        PageInfo<Product> pageInfo = new PageInfo<>(products);
+        return pageInfo;
     }
 }

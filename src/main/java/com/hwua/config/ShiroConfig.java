@@ -41,15 +41,12 @@ public class ShiroConfig {
         filterFactoryBean.setLoginUrl("/login.html");//认证失败要跳转的页面
         Map<String ,String> shiroFilterChainMap =new LinkedHashMap<>();
         shiroFilterChainMap.put("/login","anon");
+        shiroFilterChainMap.put("/logout","logout");
         shiroFilterChainMap.put("/updatePassword.html","anon");
         shiroFilterChainMap.put("/updateUserPassword","anon");
-        shiroFilterChainMap.put("/logout","logout");
-
         shiroFilterChainMap.put("/css/**","anon");
         shiroFilterChainMap.put("/img/**","anon");
         shiroFilterChainMap.put("/plugins/**","anon");
-
-
         shiroFilterChainMap.put("/**","authc");
         filterFactoryBean.setFilterChainDefinitionMap(shiroFilterChainMap);
         return filterFactoryBean;

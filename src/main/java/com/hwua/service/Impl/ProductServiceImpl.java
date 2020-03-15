@@ -9,6 +9,7 @@ import com.hwua.service.ILuceneProductService;
 import com.hwua.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -16,8 +17,6 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private ProductMapper productMapper;
-    @Autowired
-    private ILuceneProductService luceneProductService;
 
     @Override
     public PageInfo<Product> findAllProducts(Integer pageNo,Integer pageSize) throws Exception {
@@ -27,14 +26,14 @@ public class ProductServiceImpl implements IProductService {
         return pageInfo;
     }
 
-    @Override
-    public PageInfo<Product> findAllProducts(
-            String filedName, String term, Integer count, Integer pageNo, Integer pageSize) throws Exception {
-        PageHelper.startPage(pageNo,pageSize);
-        List<Product> products = luceneProductService.searchProductByTerm(filedName, term, count);
-        PageInfo<Product> pageInfo = new PageInfo<>(products);
-        return pageInfo;
-    }
+//    @Override
+//    public PageInfo<Product> findAllProducts(
+//            String filedName, String term, Integer count, Integer pageNo, Integer pageSize) throws Exception {
+//        PageHelper.startPage(pageNo,pageSize);
+//        List<Product> products = luceneProductService.searchProductByTerm(filedName, term, count);
+//        PageInfo<Product> pageInfo = new PageInfo<>(products);
+//        return pageInfo;
+//    }
 
     @Override
     public Product findProductById(String id) throws Exception {
@@ -47,8 +46,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Transactional
     public Integer addProduct(Product product) throws Exception {
-        return productMapper.addProduct(product);
+        Integer res = productMapper.addProduct(product);
+//        int i=1/0;
+        return res;
     }
 
     @Override

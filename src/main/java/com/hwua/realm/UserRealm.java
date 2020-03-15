@@ -30,11 +30,11 @@ public class UserRealm extends AuthorizingRealm {
         for (Role role:user.getList()){
             rolesName.add(role.getRoleName());
             List<Permission> permissions = role.getList();
-            List<String> permissionsUrl = new ArrayList<>();
+            List<String> permissionsNames = new ArrayList<>();
             for (Permission permission:permissions){
-                permissionsUrl.add(permission.getUrl());
+                permissionsNames.add(permission.getPermissionName());
             }
-            authorizationInfo.addStringPermissions(permissionsUrl);
+            authorizationInfo.addStringPermissions(permissionsNames);
         }
         authorizationInfo.addRoles(rolesName);
         return authorizationInfo;

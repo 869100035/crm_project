@@ -251,7 +251,7 @@
 				$.each(data.list,function (index,order) {
 					var $tr = $("<tr></tr>");
 					var $td1 = $("<td><input name='ids'  type='checkbox' value='"+order.id+"'></td>");
-					var $td2 = $("<td>"+(index+1)+"</td>");
+					var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
 					var $td3 = $("<td>"+order.orderNum+"</td>");
 					var $td4 = $("<td>"+order.product.productName+"</td>");
 					var $td5 = $("<td>"+order.product.productPrice+"</td>");

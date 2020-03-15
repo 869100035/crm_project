@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import java.io.File;
-import java.lang.annotation.Documented;
 import java.util.ArrayList;
 import java.util.List;
 @Service

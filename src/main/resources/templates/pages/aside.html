@@ -47,6 +47,7 @@
 						</a>
 					</li>
 					<li shiro:hasAnyRoles="admin, superAdmin" class="system-setting">
+<!--					<li shiro:hasPermission="user:add" class="system-setting">-->
 						<a th:href="@{/syslog-list.html}">
 							<i class="fa fa-circle-o"></i> 访问日志
 						</a>

@@ -75,9 +75,9 @@
 							<!--工具栏-->
 							<div class="pull-left">
 								<div class="form-group form-inline">
-									<div class="btn-group">
-										<button type="button" class="btn btn-default" title="新建" onclick="location.href='user-add.html'">
-											<i class="fa fa-file-o"></i> 新建
+									<div class="btn-group" >
+										<button type="button"  class="btn btn-default" title="新建" onclick="location.href='user-add.html'">
+											<i class="fa fa-file-o"></i>
 										</button>
 										
 										<button type="button" class="btn btn-default" title="刷新">
@@ -248,7 +248,7 @@
 					$.each(data.list,function (index,user) {
 						var $tr = $("<tr></tr>");
 						var $td1 = $("<td><input name='ids' type='checkbox' value='"+user.id+"'></td>");
-						var $td2 = $("<td>"+(index+1)+"</td>");
+						var $td2 = $("<td>"+((index+1)+(pageNo-1)*pageSize)+"</td>");
 						var $td3 = $("<td>"+user.username+"</td>");
 						var $td4 = $("<td>"+user.email+"</td>");
 						var $td5 = $("<td>"+user.phoneNum+"</td>");

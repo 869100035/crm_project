@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.hwua.mapper.PermissionMapper;
 import com.hwua.pojo.Permission;
 import com.hwua.service.IPermissionService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +46,7 @@ public class PermissionServiceImpl implements IPermissionService {
     }
 
     @Override
+//    @RequiresPermissions("role:update")
     public Integer updateRole_PermissionByRoleId(String listJson, String id) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         List<String> list =  mapper.readValue(listJson,List.class);

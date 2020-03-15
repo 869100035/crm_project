@@ -51,9 +51,10 @@ public class RoleController {
     }
 
     @GetMapping("/roleAddPer/{id}")
-//    @RequiresPermissions(value = {"/role/delete"})
     public String findRoleAddPermission(@PathVariable("id")String id, Map<String,Object> map)throws Exception{
-        Role role = roleService.findRoleById(id);
+
+            Role role = roleService.findRoleById(id);
+
         List<Permission> rolePermissions = role.getList();
         List<Permission> permissions = permissionService.findAllPermission();
         for (int i=0;i<rolePermissions.size();i++){

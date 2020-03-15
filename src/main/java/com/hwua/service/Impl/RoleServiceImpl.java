@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.hwua.mapper.RoleMapper;
 import com.hwua.pojo.Role;
 import com.hwua.service.IRoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +37,19 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
+    @RequiresPermissions("role:update")
     public Role findRoleById(String id) throws Exception {
         return roleMapper.findRoleById(id);
     }
 
     @Override
+    @RequiresPermissions("role:delete")
     public Integer deleteRoleById(String id) throws Exception {
         return roleMapper.deleteRoleById(id);
     }
 
     @Override
+
     public Integer updateUsers_roleByUserId(String listJson, String id) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         List<String> list =  mapper.readValue(listJson,List.class);
