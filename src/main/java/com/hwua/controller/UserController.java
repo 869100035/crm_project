@@ -30,13 +30,13 @@ public class UserController {
     private IRoleService roleService;
 
     @PostMapping("/login")
-    public String login(User user,Map<String,Object> map)throws Exception{
+    public String login(User user,boolean remember,Map<String,Object> map)throws Exception{
         String info = null;
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()){
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(),user.getPassword());
             try {
-//                token.setRememberMe(remember);
+                token.setRememberMe(remember);
                 //进行登录验证
                 currentUser.login(token);
                 //底层交给securityManager对象去调用注册得realm从文件或数据库中找到此登录用户的用户名和密码信息，拿到这些信息以后
