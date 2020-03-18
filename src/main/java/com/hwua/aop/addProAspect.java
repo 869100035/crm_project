@@ -15,6 +15,7 @@ public class addProAspect {
     @Autowired
     private ILuceneProductService luceneProductService;
 
+    //添加产品为切点
     @Pointcut("execution(* com.hwua.controller.ProductController.addProduct(..))")
     public void addProduct(){}
 
