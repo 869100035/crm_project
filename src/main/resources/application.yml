@@ -58,6 +58,4 @@ mybatis:
 pagehelper:
   auto-dialect: mysql
   reasonable: true
-logging:
-  level:
-    root: info
+
